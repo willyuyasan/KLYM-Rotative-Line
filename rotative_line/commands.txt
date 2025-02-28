@@ -5,3 +5,4 @@ php artisan octane:start --server="swoole" --host="0.0.0.0"
 composer require filament/filament:"^3.2" -W --ignore-platform-req=ext-intl --ignore-platform-req=ext-zip
 php artisan filament:install --panels
 php artisan make:filament-user
+php artisan filament:optimize
