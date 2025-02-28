@@ -1,12 +1,12 @@
 #Adding git origin
 git config --list
-git remote add origin git@github.com:caius/foo.git
+git remote add origin https://github.com/willyuyasan/KLYM-Rotative-Line.git
 
 #Creating the project tree
-git subtree add --prefix src https://github.com/willyuyasan/dc-laravel.git main --squash
+git subtree add --prefix rotative_line https://github.com/willyuyasan/rotative_line_v2.git master --squash
 
 #Pushing changes to the project child repo
-git subtree push --prefix src https://github.com/willyuyasan/dc-laravel.git main
+git subtree push --prefix rotative_line  https://github.com/willyuyasan/rotative_line_v2.git master
 
 
 
@@ -15,6 +15,8 @@ cd /
 composer create-project --prefer-dist laravel/laravel app
 cd app
 php artisan --version
+
+composer install
 composer require laravel/octane spiral/roadrunner
 php artisan octane:install --server="swoole"
 php artisan octane:start --server="swoole" --host="0.0.0.0"
