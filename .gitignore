@@ -1,0 +1,5 @@
+*mysql/
+*pgsql/
+.DS_Store
+.idea
+*.env

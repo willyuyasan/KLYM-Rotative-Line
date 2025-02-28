@@ -1,0 +1,20 @@
+#Adding git origin
+git config --list
+git remote add origin git@github.com:caius/foo.git
+
+#Creating the project tree
+git subtree add --prefix src https://github.com/willyuyasan/dc-laravel.git main --squash
+
+#Pushing changes to the project child repo
+git subtree push --prefix src https://github.com/willyuyasan/dc-laravel.git main
+
+
+
+# Create a new project into the container
+cd /
+composer create-project --prefer-dist laravel/laravel app
+cd app
+php artisan --version
+composer require laravel/octane spiral/roadrunner
+php artisan octane:install --server="swoole"
+php artisan octane:start --server="swoole" --host="0.0.0.0"
