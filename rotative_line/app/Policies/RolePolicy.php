@@ -13,7 +13,8 @@ class RolePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermission(['Viewing'],'web');
+        return $user->hasRole('Admin');
+        //return $user->hasAnyPermission(['Viewing'],'web');
         //return True;
     }
 

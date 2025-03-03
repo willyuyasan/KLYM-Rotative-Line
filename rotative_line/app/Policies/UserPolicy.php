@@ -12,8 +12,9 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermission(['Viewing'],'web');
-        //return True;
+        return $user->hasRole('Admin');
+        //return $user->hasAnyPermission(['Viewing'],'web');
+        //return false;
     }
 
     /**
@@ -35,7 +36,7 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update the model. 
      */
     public function update(User $user, User $model): bool
     {
