@@ -1,0 +1,20 @@
+#In develop
+php artisan octane:start --watch --host="0.0.0.0"
+
+# For the rotative line 
+php artisan make:model Rotativeline
+php artisan make:filament-resource Rotativeline --view
+
+
+# For the RL clients
+php artisan make:model RotativelineClients
+php artisan make:migration RotativelineClients #Here insert the view query
+php artisan migrate
+
+# For the payment plans status
+php artisan make:model Rlquote
+php artisan make:filament-relation-manager RotativelineResource rlquotes quote
+
+# For the interest details
+php artisan make:model Rlinterest
+php artisan make:filament-relation-manager RotativelineResource rlinterests quote_adj
