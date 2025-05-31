@@ -72,6 +72,7 @@ return new class extends Migration
         ,min(rl.disbursement_date) as first_disbursement_date
         ,min(rl.number_line) as min_number_line
         ,count(*) as rls
+        ,sum(rl.rl_active_id::int) as active_rls
         ,sum(rl.value_to_issuer) as capital_lend
         ,sum(rl.capital_debt) as capital_debt 
         ,sum(rl.received_payment) as received_payment
@@ -93,6 +94,49 @@ return new class extends Migration
         from clients cls
         left join client_status s on (cls.issuer_tax_number = s.issuer_tax_number)
         left join client_collection_status cs on (cls.issuer_tax_number = cs.issuer_tax_number)
+
+
+
+        CREATE OR REPLACE VIEW paymentmonths as
+        with 
+        payments as (
+        select 
+        p.*
+        ,date_part('year', p.credit_dates::date)||'-'||lpad(date_part('month', p.credit_dates::date)::text,2,'0') as payment_month
+        from rlpayments p
+        )
+        select
+        row_number() over(order by p.payment_month) as id
+        ,p.payment_month
+        ,count(*) as payments
+        ,sum(p.payment_amount) as payment_amount
+        from payments p
+        group by 
+        p.payment_month
+        order by
+        p.payment_month
+
+
+        CREATE OR REPLACE VIEW disbursementmonths as
+        with 
+        disbursement as (
+        select 
+        rl.disbursement_date
+        ,rl.value_to_issuer
+        ,date_part('year', rl.disbursement_date::date)||'-'||lpad(date_part('month', rl.disbursement_date::date)::text,2,'0') as disbursement_month
+        from rotativelines rl
+        )
+        select
+        row_number() over(order by d.disbursement_month) as id
+        ,d.disbursement_month
+        ,count(*) as disbursments
+        ,sum(d.value_to_issuer) as disbursement_amount
+        from disbursement d
+        group by 
+        d.disbursement_month
+        order by
+        d.disbursement_month
+
         ");
     }
 

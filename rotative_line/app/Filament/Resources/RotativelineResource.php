@@ -68,7 +68,7 @@ class RotativelineResource extends Resource
                     TextInput::make('value_to_issuer')
                         ->label('Valor del crédito')
                         ->required()
-                        ->mask(RawJs::make('$money($input)'))
+                        ->mask(RawJs::make('$money($input,0)'))
                         ->stripCharacters(',')
                         ->numeric()
                         ->suffix('$')
@@ -123,7 +123,7 @@ class RotativelineResource extends Resource
                         ->maxLength(100)
                         ->grow(false),
 
-                    TextInput::make('quote')
+                    TextInput::make('quote_adj')
                         ->label('Couta actual')
                         ->grow(false),
 
@@ -143,7 +143,7 @@ class RotativelineResource extends Resource
                         ->suffix('$')
                         ->grow(false),
 
-                    DatePicker::make('credit_term_end_date')
+                    DatePicker::make('next_expected_rlpayment_date')
                         ->label('Próxima fecha de pago')
                         ->grow(false),
                 ])
@@ -153,7 +153,15 @@ class RotativelineResource extends Resource
                 ->schema([
 
                     TextInput::make('capital_debt')
-                        ->label('Capital en deuda')
+                        ->label('Capital deuda total')
+                        ->mask(RawJs::make('$money($input)'))
+                        ->stripCharacters(',')
+                        ->numeric()
+                        ->suffix('$')
+                        ->grow(false),
+
+                    TextInput::make('pp_capital_debt')
+                        ->label('Capital pago minimo')
                         ->mask(RawJs::make('$money($input)'))
                         ->stripCharacters(',')
                         ->numeric()
@@ -162,6 +170,7 @@ class RotativelineResource extends Resource
 
                     TextInput::make('interest_debt')
                         ->label('Interes en deuda')
+                        ->formatStateUsing(fn (string $state): string => number_format($state,0))
                         ->mask(RawJs::make('$money($input)'))
                         ->stripCharacters(',')
                         ->numeric()
@@ -170,6 +179,7 @@ class RotativelineResource extends Resource
 
                     TextInput::make('default_charge_debt')
                         ->label('Mora en deuda')
+                        ->formatStateUsing(fn (string $state): string => number_format($state,0))
                         ->mask(RawJs::make('$money($input)'))
                         ->stripCharacters(',')
                         ->numeric()
@@ -177,7 +187,7 @@ class RotativelineResource extends Resource
                         ->grow(false),
 
                 ])
-                ->columns(3),
+                ->columns(4),
 
                 Fieldset::make('Reportes PDF')
                 ->schema([
@@ -284,7 +294,7 @@ class RotativelineResource extends Resource
                     ->grow(false)
                     ->numeric(decimalPlaces: 0),
 
-                TextColumn::make('credit_term_end_date')
+                TextColumn::make('next_expected_rlpayment_date')
                     ->label('Próxima fecha de pago')
                     ->grow(false),
 
@@ -356,6 +366,7 @@ class RotativelineResource extends Resource
     {
         return [
             //
+            RelationManagers\RlpaymentsRelationManager::class,
             RelationManagers\RlquotesRelationManager::class,
             RelationManagers\RlinterestsRelationManager::class,
         ];

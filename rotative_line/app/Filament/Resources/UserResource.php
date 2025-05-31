@@ -38,6 +38,7 @@ class UserResource extends Resource
 
                 TextInput::make('password')
                     ->password()
+                    ->revealable()
                     ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $operation): bool => $operation === 'create'),

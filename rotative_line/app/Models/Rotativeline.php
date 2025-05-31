@@ -19,5 +19,10 @@ class Rotativeline extends Model
     {
         return $this->hasMany(Rlinterest::class);
     }
+
+    public function rlpayments(): HasMany
+    {
+        return $this->hasMany(Rlpayment::class);
+    }
 }
 

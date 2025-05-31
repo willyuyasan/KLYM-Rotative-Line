@@ -18,3 +18,19 @@ php artisan make:filament-relation-manager RotativelineResource rlquotes quote
 # For the interest details
 php artisan make:model Rlinterest
 php artisan make:filament-relation-manager RotativelineResource rlinterests quote_adj
+
+# For the payment details
+php artisan make:model Rlpayment
+php artisan make:filament-relation-manager RotativelineResource rlpayments quote
+
+# Adjust policies
+php artisan make:policy RotativelinePolicy --model=Rotativeline
+
+
+# Dashboard
+php artisan make:filament-widget StatsOverview --stats-overview
+php artisan make:filament-widget DisbursementsChart --chart
+
+# For the charts data
+php artisan make:model Disbursementmonth
+php artisan make:model Paymentmonth
