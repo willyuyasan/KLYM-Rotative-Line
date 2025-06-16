@@ -46,10 +46,26 @@ class PaymentsChart extends ChartWidget
 
         $lchart1 = count($chart1);
 
+        foreach($chart1 as $chart){
+            $month = $chart['month'];
+            $disbursement_amount = $chart['disbursement_amount'];
+            $payment_amount = $chart['payment_amount'];
+        }
+        
+
         return [1];
     }
 }
 
 /*
 php artisan tinker
+
+use App\Models\Disbursementmonth;
+
+$chart1=Disbursementmonth::query()
+            ->get()
+            ->toArray();
+
+$lchart1 = count($chart1);
+
 */

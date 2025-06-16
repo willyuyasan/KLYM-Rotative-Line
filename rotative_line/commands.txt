@@ -1,6 +1,9 @@
 #In develop
 php artisan octane:start --watch --host="0.0.0.0"
 
+#In production
+php artisan octane:start --server="swoole" --host="0.0.0.0"
+
 # For the rotative line 
 php artisan make:model Rotativeline
 php artisan make:filament-resource Rotativeline --view
@@ -34,3 +37,21 @@ php artisan make:filament-widget DisbursementsChart --chart
 # For the charts data
 php artisan make:model Disbursementmonth
 php artisan make:model Paymentmonth
+
+
+# For the API consumption
+php artisan make:filament-page Ppsimulation
+
+php artisan make:controller PpsimulationAPI
+
+in routes->web.php create the route:
+Route::get('PpsimulationAPI', [PpsimulationAPI::class, "index"]);
+
+in app->http->controllers->PpsimulationAPI.php configure index function:
+
+composer require calebporzio/sushi
+php artisan make:model PpsimulationApiModel
+#do not forget configure the config/octane.php file to set 'max_execution_time' => 60, seconds
+
+# Making a table widget
+php artisan make:filament-widget PpApiTableSummary --table

@@ -96,18 +96,20 @@ return new class extends Migration
         left join client_collection_status cs on (cls.issuer_tax_number = cs.issuer_tax_number)
 
 
+        
 
-        CREATE OR REPLACE VIEW paymentmonths as
+        CREATE OR REPLACE VIEW disbursementmonths as
         with 
         payments as (
         select 
         p.*
         ,date_part('year', p.credit_dates::date)||'-'||lpad(date_part('month', p.credit_dates::date)::text,2,'0') as payment_month
         from rlpayments p
-        )
+        ),
+
+        payments2 as (
         select
-        row_number() over(order by p.payment_month) as id
-        ,p.payment_month
+        p.payment_month
         ,count(*) as payments
         ,sum(p.payment_amount) as payment_amount
         from payments p
@@ -115,20 +117,19 @@ return new class extends Migration
         p.payment_month
         order by
         p.payment_month
+        ),
 
-
-        CREATE OR REPLACE VIEW disbursementmonths as
-        with 
         disbursement as (
         select 
         rl.disbursement_date
         ,rl.value_to_issuer
         ,date_part('year', rl.disbursement_date::date)||'-'||lpad(date_part('month', rl.disbursement_date::date)::text,2,'0') as disbursement_month
         from rotativelines rl
-        )
+        ),
+
+        disbursement2 as (
         select
-        row_number() over(order by d.disbursement_month) as id
-        ,d.disbursement_month
+        d.disbursement_month
         ,count(*) as disbursments
         ,sum(d.value_to_issuer) as disbursement_amount
         from disbursement d
@@ -136,6 +137,16 @@ return new class extends Migration
         d.disbursement_month
         order by
         d.disbursement_month
+        )
+        select
+        row_number() over(order by d.disbursement_month) as id
+        ,coalesce(d.disbursement_month, p.payment_month) as month_
+        ,d.disbursments
+        ,d.disbursement_amount
+        ,p.payments
+        ,p.payment_amount
+        from disbursement2 d
+        full join payments2 p on (d.disbursement_month = p.payment_month)
 
         ");
     }

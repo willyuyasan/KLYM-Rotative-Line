@@ -68,7 +68,7 @@ class RotativelineResource extends Resource
                     TextInput::make('value_to_issuer')
                         ->label('Valor del crédito')
                         ->required()
-                        ->mask(RawJs::make('$money($input,0)'))
+                        ->mask(RawJs::make('$money($input)'))
                         ->stripCharacters(',')
                         ->numeric()
                         ->suffix('$')
