@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use Closure;
+use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Support\Facades\File;
@@ -34,8 +36,8 @@ class Ppsimulation extends Page implements HasTable, HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $navigationLabel = 'Calculo Plan de Pagos';
-    protected static ?string $modelLabel = 'Calculo Plan de Pagos';
+    protected static ?string $navigationLabel = 'Calculo plan de pagos';
+    protected static ?string $title = 'Calculo plan de pagos';
 
     protected static string $view = 'filament.pages.ppsimulation';
 
@@ -59,7 +61,7 @@ class Ppsimulation extends Page implements HasTable, HasForms
 
                     TextInput::make('issuer_tax_number')
                         ->label('Identificación cliente')
-                        //->required()
+                        ->required()
                         ->maxLength(20)
                         ->grow(false),
                 
@@ -71,10 +73,12 @@ class Ppsimulation extends Page implements HasTable, HasForms
                 
                     TextInput::make('value_to_issuer')
                         ->label('Valor del crédito')
-                        //->required()
+                        ->required()
+                        ->minValue(10000000)
+                        ->maxValue(7000000000)
+                        ->numeric()
                         ->mask(RawJs::make('$money($input)'))
                         ->stripCharacters(',')
-                        ->numeric()
                         ->suffix('$')
                         ->grow(false),
 
@@ -82,6 +86,8 @@ class Ppsimulation extends Page implements HasTable, HasForms
                         ->label('Tasa de interés')
                         //->required()
                         //->formatStateUsing(fn (string $state): string => number_format($state*100,2))
+                        ->minValue(1)
+                        ->maxValue(40)
                         ->suffix('%(M.V.)')
                         ->numeric()
                         ->grow(false),
@@ -92,6 +98,8 @@ class Ppsimulation extends Page implements HasTable, HasForms
                         //->formatStateUsing(fn (string $state): string => number_format($state,0))
                         ->suffix('Dias')
                         ->integer()
+                        ->minValue(60)
+                        ->maxValue(270)
                         ->grow(false),
 
                     DatePicker::make('disbursement_date')
@@ -99,6 +107,7 @@ class Ppsimulation extends Page implements HasTable, HasForms
                         //->required()
                         //->mask('99/99/9999')
                         //->placeholder('MM/DD/YYYY')
+                        ->afterOrEqual('tomorrow')
                         ->grow(false),
                 
                     ])
@@ -109,10 +118,19 @@ class Ppsimulation extends Page implements HasTable, HasForms
                     Actions::make([
                         Action::make('getPpsimulation')
                             ->color('info')
+                            ->icon('heroicon-m-pencil-square')
                             ->label('Generate')
-                            ->action('getPpsimulation')
+                            ->action('getPpsimulation'),
+                        
+                        Action::make('clearSimulation')
+                            ->color('primary')
+                            ->label('Clear')
+                            ->action('clearSimulation')
                     ])
-                ]),
+                    ->alignment(Alignment::Center)
+                    ->fullWidth()
+                ])
+                ->columns(1),
         
             ])
             ->statePath('data');

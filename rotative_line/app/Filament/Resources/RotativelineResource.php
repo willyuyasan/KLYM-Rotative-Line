@@ -237,7 +237,7 @@ class RotativelineResource extends Resource
                     ->grow(false)
                     ->size('sm')
                     ->copyable()
-                    ->searchable(['product','number_line']),
+                    ->searchable(['product','number_line','factoring_operation_id']),
 
                 TextColumn::make('issuer_name')
                     ->label('Nombre cliente')
@@ -282,6 +282,11 @@ class RotativelineResource extends Resource
 
                 TextColumn::make('capital_debt')
                     ->label('Capital en deuda')
+                    ->grow(false)
+                    ->numeric(decimalPlaces: 0),
+
+                TextColumn::make('capital_paid')
+                    ->label('Capital pagado')
                     ->grow(false)
                     ->numeric(decimalPlaces: 0),
 
