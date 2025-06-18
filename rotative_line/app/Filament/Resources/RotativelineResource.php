@@ -152,8 +152,8 @@ class RotativelineResource extends Resource
                 Fieldset::make('Balance actual')
                 ->schema([
 
-                    TextInput::make('capital_debt')
-                        ->label('Capital deuda total')
+                    TextInput::make('new_expected_payment')
+                        ->label('Pago minimo')
                         ->mask(RawJs::make('$money($input)'))
                         ->stripCharacters(',')
                         ->numeric()
@@ -186,8 +186,24 @@ class RotativelineResource extends Resource
                         ->suffix('$')
                         ->grow(false),
 
+                    TextInput::make('capital_debt')
+                        ->label('Capital deuda total')
+                        ->mask(RawJs::make('$money($input)'))
+                        ->stripCharacters(',')
+                        ->numeric()
+                        ->suffix('$')
+                        ->grow(false),
+
+                    TextInput::make('today_debt')
+                        ->label('Pago para cancelación')
+                        ->mask(RawJs::make('$money($input)'))
+                        ->stripCharacters(',')
+                        ->numeric()
+                        ->suffix('$')
+                        ->grow(false),
+
                 ])
-                ->columns(4),
+                ->columns(6),
 
                 Fieldset::make('Reportes PDF')
                 ->schema([

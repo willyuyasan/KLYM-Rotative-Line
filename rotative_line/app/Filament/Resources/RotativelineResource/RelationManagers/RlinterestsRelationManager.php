@@ -72,15 +72,18 @@ class RlinterestsRelationManager extends RelationManager
                 TextColumn::make('payment_amount')
                     ->label('Pago del cliente')
                     ->grow(false)
-                    ->numeric(decimalPlaces: 0),
+                    ->numeric(decimalPlaces: 0)
+                    ->summarize(Sum::make()
+                        ->label('') 
+                        ->numeric(decimalPlaces: 0)
+                    ),
                 
                 TextColumn::make('payment_to_capital')
                     ->label('Abono a capital')
                     ->grow(false)
                     ->numeric(decimalPlaces: 0)
-                    ->summarize(Summarizer::make()
-                        ->label('')
-                        ->using(fn (Builder $query): string => $query->latest('id')->pluck('capital_debt')[0])
+                    ->summarize(Sum::make()
+                        ->label('') 
                         ->numeric(decimalPlaces: 0)
                     ),
 
