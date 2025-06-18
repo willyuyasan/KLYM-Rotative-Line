@@ -40,7 +40,7 @@ class RlinterestsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('quote_adj')
+            ->recordTitleAttribute('interest_event_description')
             ->columns([
                 TextColumn::make('quote_adj')
                     ->label('Cuota'),
